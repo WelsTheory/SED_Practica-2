@@ -36,11 +36,13 @@ void app_main(void)
   SD_gets(f, BROKER, sizeof(BROKER));
   SD_close(f);
   CRONO_delayMs(500);
-  printf("valor de red %s\n",wifi_message); 
+  printf("MAIN: Valor de Red %s\n",wifi_message); 
+  printf("MAIN: Valor de Broker %s\n",BROKER); 
+  printf("MAIN: Valor de Mediciones %s\n",medicones); 
   // Inicializaciones
   WIFI_userInit(wifi_message,pwd_message);
   MQTT_userInit(BROKER);
-  printf("valor de Broker %s\n",BROKER);  
+   
   
   f = SD_open("lecturas.csv", "w");
   SD_printf(f, "Timestamp, RSSI\n");
@@ -49,11 +51,11 @@ void app_main(void)
   MQTT_publish("test/led",led_msg);  
   IO_toggleLed();
 
-  for(int i=0;i<medicones[0];i++)
+  for(int i=0;i<=medicones[0];i++)
   {
     rssi = WIFI_getRSSI();
     epoch = CRONO_getTime(timestamp, sizeof(timestamp));
-    sprintf(msg,"%s,%d \n", timestamp,rssi);
+    sprintf(msg,"%s,%d", timestamp,rssi);
     SD_printf(f, "%s\n", msg);
     MQTT_publish("test/msg",msg);
     CRONO_delayMs(1000);
